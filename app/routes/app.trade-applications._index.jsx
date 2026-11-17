@@ -1,6 +1,49 @@
-import { useLoaderData } from "react-router";
-import { Link } from "react-router";
+import { useActionData, useLoaderData, useNavigation } from "react-router";
+import { Form, Link } from "react-router";
 import prisma from "../db.server";
+import { authenticate } from "../shopify.server";
+
+export async function action({ request }) {
+  await authenticate.admin(request);
+
+  const formData = await request.formData();
+
+  if (formData.get("intent") !== "delete") {
+    return { error: "Unknown action." };
+  }
+
+  const id = formData.get("id")?.toString();
+
+  if (!id) {
+    return { error: "Application ID is missing." };
+  }
+
+  const application = await prisma.tradeApplication.findUnique({
+    where: { id },
+    select: {
+      businessName: true,
+      tradeAccount: { select: { id: true } },
+    },
+  });
+
+  if (!application) {
+    return { error: "Application not found." };
+  }
+
+  // An approved application owns a trade account (referrals,
+  // commissions, Shopify customer and discount), so it must not
+  // be deleted from here.
+  if (application.tradeAccount) {
+    return {
+      error:
+        "This application has a trade account and cannot be deleted.",
+    };
+  }
+
+  await prisma.tradeApplication.delete({ where: { id } });
+
+  return { success: `Deleted application from ${application.businessName}.` };
+}
 
 export async function loader() {
   const applications = await prisma.tradeApplication.findMany({
@@ -19,6 +62,7 @@ export async function loader() {
       vatNumber: true,
       status: true,
       createdAt: true,
+      tradeAccount: { select: { id: true } },
     },
   });
 
@@ -29,9 +73,29 @@ export async function loader() {
 
 export default function TradeApplications() {
   const { applications } = useLoaderData();
+  const actionData = useActionData();
+  const navigation = useNavigation();
+
+  const deletingId =
+    navigation.state === "submitting" &&
+    navigation.formData?.get("intent") === "delete"
+      ? navigation.formData.get("id")
+      : null;
 
   return (
     <div style={pageStyle}>
+      {actionData?.error && (
+        <div style={{ ...noticeStyle, ...errorNoticeStyle }}>
+          {actionData.error}
+        </div>
+      )}
+
+      {actionData?.success && (
+        <div style={{ ...noticeStyle, ...successNoticeStyle }}>
+          {actionData.success}
+        </div>
+      )}
+
       {/* HEADER */}
 
       <div style={headerStyle}>
@@ -137,13 +201,52 @@ export default function TradeApplications() {
 
                   {/* VIEW */}
 
-                  <td style={tdStyle}>
+                  <td style={{ ...tdStyle, whiteSpace: "nowrap" }}>
                     <Link
                       to={`/app/trade-applications/${application.id}`}
                       style={viewButtonStyle}
                     >
                       View
                     </Link>
+
+                    <Form
+                      method="post"
+                      style={{ display: "inline", marginLeft: "8px" }}
+                      onSubmit={(event) => {
+                        if (
+                          !window.confirm(
+                            `Delete the application from ${application.businessName}? This cannot be undone.`
+                          )
+                        ) {
+                          event.preventDefault();
+                        }
+                      }}
+                    >
+                      <input type="hidden" name="intent" value="delete" />
+                      <input type="hidden" name="id" value={application.id} />
+
+                      <button
+                        type="submit"
+                        style={
+                          application.tradeAccount
+                            ? { ...deleteButtonStyle, ...disabledButtonStyle }
+                            : deleteButtonStyle
+                        }
+                        disabled={
+                          Boolean(application.tradeAccount) ||
+                          deletingId === application.id
+                        }
+                        title={
+                          application.tradeAccount
+                            ? "Applications with a trade account cannot be deleted"
+                            : "Delete application"
+                        }
+                      >
+                        {deletingId === application.id
+                          ? "Deleting…"
+                          : "Delete"}
+                      </button>
+                    </Form>
                   </td>
                 </tr>
               ))}
@@ -283,6 +386,38 @@ const badgeStyle = {
   borderRadius: "5px",
   fontSize: "12px",
   fontWeight: "600",
+};
+
+const deleteButtonStyle = {
+  padding: "7px 14px",
+  background: "#fff",
+  color: "#b42318",
+  border: "1px solid #b42318",
+  borderRadius: "5px",
+  fontSize: "13px",
+  cursor: "pointer",
+};
+
+const disabledButtonStyle = {
+  opacity: 0.4,
+  cursor: "not-allowed",
+};
+
+const noticeStyle = {
+  padding: "12px 16px",
+  borderRadius: "6px",
+  marginBottom: "20px",
+  fontSize: "14px",
+};
+
+const errorNoticeStyle = {
+  background: "#f8d7da",
+  color: "#842029",
+};
+
+const successNoticeStyle = {
+  background: "#d1e7dd",
+  color: "#0f5132",
 };
 
 const viewButtonStyle = {

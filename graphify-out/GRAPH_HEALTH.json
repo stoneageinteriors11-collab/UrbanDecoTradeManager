@@ -1,0 +1,200 @@
+{
+  "node_count": 452,
+  "unverified_node_count": 0,
+  "raw_edge_count": 627,
+  "non_object_edges": 0,
+  "missing_endpoint_edges": 0,
+  "dangling_endpoint_edges": 0,
+  "external_reference_edges": 2,
+  "self_loop_edges": 0,
+  "valid_candidate_edges": 625,
+  "exact_duplicate_edges": 0,
+  "directed_unique_endpoint_pairs": 620,
+  "directed_same_endpoint_collapsed_edges": 5,
+  "undirected_unique_endpoint_pairs": 619,
+  "undirected_same_endpoint_collapsed_edges": 6,
+  "same_endpoint_group_count": 5,
+  "relation_variant_groups": 2,
+  "source_file_variant_groups": 0,
+  "source_location_variant_groups": 3,
+  "context_variant_groups": 0,
+  "post_build_graph_type": "Graph",
+  "post_build_node_count": 454,
+  "post_build_edge_count": 621,
+  "post_build_error": "",
+  "producer_suppression": {
+    "path": "C:\\Users\\Admin\\AppData\\Roaming\\uv\\tools\\graphifyy\\Lib\\site-packages\\graphify\\extract.py",
+    "total_sites": 12,
+    "sites": [
+      {
+        "line": 1830,
+        "name": "seen_ids",
+        "tuple_arity": 0,
+        "sample": "seen_ids = {n[\"id\"] for n in nodes}"
+      },
+      {
+        "line": 2393,
+        "name": "seen_ids",
+        "tuple_arity": 0,
+        "sample": "seen_ids = {n[\"id\"] for n in nodes}"
+      },
+      {
+        "line": 2395,
+        "name": "seen_doc_refs",
+        "tuple_arity": 0,
+        "sample": "seen_doc_refs: set[str] = set()"
+      },
+      {
+        "line": 3062,
+        "name": "seen_ids",
+        "tuple_arity": 0,
+        "sample": "seen_ids: set[str] = {n[\"id\"] for n in nodes}"
+      },
+      {
+        "line": 3209,
+        "name": "seen_ids",
+        "tuple_arity": 0,
+        "sample": "seen_ids = {n.get(\"id\") for n in nodes}"
+      },
+      {
+        "line": 4350,
+        "name": "seen_keys",
+        "tuple_arity": 0,
+        "sample": "seen_keys: set[tuple] = set()"
+      },
+      {
+        "line": 4536,
+        "name": "seen_keys",
+        "tuple_arity": 0,
+        "sample": "seen_keys: set[tuple] = set()"
+      },
+      {
+        "line": 8160,
+        "name": "seen_ids",
+        "tuple_arity": 0,
+        "sample": "seen_ids: set[str] = set()"
+      },
+      {
+        "line": 8268,
+        "name": "seen_ids",
+        "tuple_arity": 0,
+        "sample": "seen_ids: set[str] = set()"
+      },
+      {
+        "line": 8347,
+        "name": "seen_ids",
+        "tuple_arity": 0,
+        "sample": "seen_ids: set[str] = set()"
+      },
+      {
+        "line": 8872,
+        "name": "seen_ids",
+        "tuple_arity": 0,
+        "sample": "seen_ids: set[str] = set()"
+      },
+      {
+        "line": 8873,
+        "name": "seen_edges",
+        "tuple_arity": 4,
+        "sample": "seen_edges: set[tuple[str, str, str, str | None]] = set()"
+      }
+    ],
+    "error": ""
+  },
+  "examples": [
+    {
+      "source": "app_routes_app_commissions_commissionledger",
+      "target": "app_routes_app_commissions_commissionledger_handleapproveclick",
+      "edge_count": 2,
+      "relations": [
+        "calls",
+        "contains"
+      ],
+      "source_files": [
+        "app/routes/app.commissions.jsx"
+      ],
+      "source_locations": [
+        "L475",
+        "L751"
+      ],
+      "contexts": [
+        "",
+        "call"
+      ]
+    },
+    {
+      "source": "app_routes_app",
+      "target": "ref_shopify_shopify_app_react_router",
+      "edge_count": 2,
+      "relations": [
+        "imports_from"
+      ],
+      "source_files": [
+        "app/routes/app.jsx"
+      ],
+      "source_locations": [
+        "L2",
+        "L3"
+      ],
+      "contexts": [
+        "import"
+      ]
+    },
+    {
+      "source": "app_routes_app_trade_applications_id_action",
+      "target": "app_routes_app_trade_applications_id_action_rollbackshopifycustomer",
+      "edge_count": 2,
+      "relations": [
+        "calls",
+        "contains"
+      ],
+      "source_files": [
+        "app/routes/app.trade-applications.$id.jsx"
+      ],
+      "source_locations": [
+        "L1590",
+        "L1638"
+      ],
+      "contexts": [
+        "",
+        "call"
+      ]
+    },
+    {
+      "source": "app_routes_app_trade_applications_index",
+      "target": "ref_react_router",
+      "edge_count": 2,
+      "relations": [
+        "imports_from"
+      ],
+      "source_files": [
+        "app/routes/app.trade-applications._index.jsx"
+      ],
+      "source_locations": [
+        "L1",
+        "L2"
+      ],
+      "contexts": [
+        "import"
+      ]
+    },
+    {
+      "source": "app_shopify_server",
+      "target": "ref_shopify_shopify_app_react_router",
+      "edge_count": 2,
+      "relations": [
+        "imports_from"
+      ],
+      "source_files": [
+        "app/shopify.server.js"
+      ],
+      "source_locations": [
+        "L1",
+        "L2"
+      ],
+      "contexts": [
+        "import"
+      ]
+    }
+  ]
+}
